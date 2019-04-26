@@ -1,11 +1,13 @@
+/*INFO
+{\bf Descripción:} Mantiene una envolvente $S$ con queries de agregar lineas $y = mx + b$ y queries para $\max_{(m, b)\in S} mx + b$.
+{\bf Complejidad:} $\mathcal{O}(\log n)$ amortizado por query.
+*/
 #include <bits/stdc++.h>
 using namespace std;
 
 //ignore
 typedef long long ll;
 //unignore
-// Tomado de KACTL. O(nlog n). Para O(n) se hace un deque de lineas y se saca del
-// lado correspondiente cuando salen de la envolvente o no son relevantes.
 bool Q;
 struct Line {
     mutable ll m, b, p;

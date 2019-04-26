@@ -1,3 +1,7 @@
+/*INFO
+{\bf Descripción: } Encuentra vértices de corte y aristas de corte (puentes) en una gráfica.
+{\bf Complejidad: } $\mathcal{O}(V + E)$
+*/
 #include <bits/stdc++.h>
 using namespace std;
 

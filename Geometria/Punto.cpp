@@ -1,3 +1,6 @@
+/*INFO
+{\bf Descripción: } Estructura genérica para representar puntos (vectores) en 2D.
+*/
 #include <bits/stdc++.h>
 using namespace std;
 

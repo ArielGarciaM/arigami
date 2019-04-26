@@ -1,3 +1,7 @@
+/*INFO
+{\bf Descripción:} Encuentra una subsucesión creciente (o estrictamente creciente) de longitud máxima.
+{\bf Complejidad:} $\mathcal{O}(n \log n)$.
+*/
 #include <bits/stdc++.h>
 using namespace std;
 

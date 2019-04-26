@@ -1,3 +1,7 @@
+/*INFO
+{\bf Descripción:} Union Find con path compression y union by size. Mantiene representantes de una unión disjunta.
+{\bf Complejidad:} $\mathcal{O}(\alpha(n))$ amortizado.
+*/
 #include <bits/stdc++.h>
 using namespace std;
 

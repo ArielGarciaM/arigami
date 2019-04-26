@@ -1,3 +1,7 @@
+/*INFO
+{\bf Descripción:} Segment Tree recursivo para RMQ y similares.
+{\bf Complejidad:} $\mathcal{O}(\log n)$ en updates y queries.
+*/
 #include <bits/stdc++.h>
 using namespace std;
 

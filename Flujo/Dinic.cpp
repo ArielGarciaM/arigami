@@ -1,3 +1,7 @@
+/*INFO
+{\bf Descripción:} Encuentra un flujo máximo en una red. Incluye scaling para casos malvados anti-Dinic.
+{\bf Complejidad:} $\mathcal{O}(V^2E)$ sin scaling. $\mathcal{O}(VE\log(\max))$ con scaling. $\mathcal{O}(E\sqrt{V})$ para matchings. Rápido en la práctica.
+*/
 #include <bits/stdc++.h>
 using namespace std;
 //ignore
@@ -9,12 +13,13 @@ const bool scale = true; // Magia. O(VElog(max)), pero peor constante.
 int dist[MAXN], ptr[MAXN], src, dst, lim = 1;
 struct Edge {
     int to, rev, f, cap;
-	Edge(int to, int rev, int f, int cap) : to(to), rev(rev), f(f), cap(cap) {}
 };
 vector<Edge> G[MAXN];
-void addEdge(int u, int v, int cap) {
-    G[u].push_back(Edge(v, G[v].size(), 0, cap));
-    G[v].push_back(Edge(u, G[u].size() - 1, 0, 0));
+void addEdge(int u, int v, int c, int r = 0) {
+    Edge a = {v, (int)G[v].size(), 0, c};
+    Edge b = {u, (int)G[u].size(), 0, r};
+    G[u].push_back(a);
+    G[v].push_back(b);
 }
 bool bfs() {
     queue<int> q({src});
@@ -67,8 +72,7 @@ int main() {
         int a, b;
         ll w;
         cin >> a >> b >> w;
-        addEdge(a, b, w);
-        addEdge(b, a, w);
+        if(a != b) addEdge(a, b, w, w);
     }
     src = 1, dst = n;
     cout << dinic() << endl;

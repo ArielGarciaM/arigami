@@ -1,3 +1,7 @@
+/*INFO
+{\bf Descripción: } Calcula $z[i] = $ máximo $L$ tal que $s[i : i + L) = s[0 : L)$ para cada $i$. Útil para string matching.
+{\bf Complejidad: } $\mathcal{O}(n)$
+*/
 #include <bits/stdc++.h>
 using namespace std;
 

@@ -1,3 +1,7 @@
+/*INFO
+{\bf Descripción: } Encuentra componentes fuertemente conexas en una gráfica dirigida (Tarjan).
+{\bf Complejidad: } $\mathcal{O}(V + E)$
+*/
 #include <bits/stdc++.h>
 using namespace std;
 

@@ -1,10 +1,14 @@
+/*INFO
+{\bf Descripción: } Crea $SA$ tal que $s[SA[i]:n] \leq s[SA[i + 1]:n]$ para todo $i$.
+{\bf Complejidad: } $\mathcal{O}(n \log n)$
+*/
 #include <bits/stdc++.h>
 using namespace std;
 
 //ignore
 typedef pair<int,int> ii;
 //unignore
-const int MAXN = 4e5;
+const int MAXN = 5e5 + 10;
 string s;
 int SA[MAXN], LCP[MAXN], val[MAXN], cnt[MAXN], n;
 
@@ -21,6 +25,7 @@ void csort(int l) {
         SA[i] = tSA[i];
 }
 void buildSA() {
+    n = s.length();
     int nval[MAXN], rk, l = 1;
     iota(SA, SA + n, 0);
     for(int i = 0; i < n; i++)
@@ -36,7 +41,7 @@ void buildSA() {
         l <<= 1;
     } while(val[SA[n - 1]] != n - 1 && l < n);
 }
-void buildLCP() {
+void buildLCP() { // LCP[i] = LCP(s[SA[i - 1]:n], s[SA[i]:n])
     int pre[MAXN], PLCP[MAXN], L = 0;
     pre[SA[0]] = -1;
     for(int i = 1; i < n; i++)
@@ -56,9 +61,20 @@ void buildLCP() {
 int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(0);
-    cin >> n;
-    cin >> s;
+    string t;
+    cin >> s >> t;
+    int m = s.length();
+    s += '$';
+    s += t;
+    s += '#';
     buildSA();
     buildLCP();
-    cout << max(*max_element(LCP, LCP + n), 0) << '\n';
+    int ans = 0;
+    //for(int i = 0; i < s.length(); i++)
+    //    cout << s.substr(SA[i]) << " " << LCP[i] << endl;
+    for(int i = 1; i < n; i++) {
+        if((SA[i] < m && SA[i - 1] > m) || (SA[i] > m && SA[i - 1] < m))
+            ans = max(ans, LCP[i]); 
+    }
+    cout << ans << endl;
 }

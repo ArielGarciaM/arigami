@@ -1,3 +1,7 @@
+/*INFO
+{\bf Descripción: } Encuentra $x$ tal que $x \equiv x_1 \pmod{m_1}, x \equiv x_2 \pmod{m_2}$. Regresa $-1$ si tal $x$ no existe.
+{\bf Complejidad: } $\mathcal{O}(\log(m_1 + m_2))$. Rápido en la práctica.
+*/
 #include <bits/stdc++.h>
 using namespace std;
 

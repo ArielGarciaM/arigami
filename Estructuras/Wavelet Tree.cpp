@@ -1,3 +1,7 @@
+/*INFO
+{\bf Descripción:} Árbol que mantiene subsucesiones de un arreglo formadas por elementos con valores en ciertos intervalos. Útil para range queries de k-ésimo elemento o número de elementos debajo de cierta cota, etc.
+{\bf Complejidad:} $\mathcal{O}(\log(\max A))$ por query.
+*/
 #include <bits/stdc++.h>
 using namespace std;
 

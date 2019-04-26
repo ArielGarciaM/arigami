@@ -1,3 +1,8 @@
+/*INFO
+{\bf Descripción:} Encuentra un árbol generador de peso mínimo para una gráfica.
+{\bf Complejidad:} $\mathcal{O}(E \log E)$
+{\bf Dependencias:} \texttt{Estructuras/Union Find}
+*/
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -17,7 +22,6 @@ bool join(int u, int v) {
     return sz[u] += sz[v], rep[v] = u, true;
 }
 //unignore
-//Incluye Union Find bajo Estructuras.
 struct edge {
     int u, v, w;
     bool operator< (const edge &o) const{ return w < o.w; }

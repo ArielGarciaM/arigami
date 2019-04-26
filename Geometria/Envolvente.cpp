@@ -1,3 +1,8 @@
+/*INFO
+{\bf Descripción: } Encuentra la envolvente convexa de un conjunto de puntos. Si un punto está en el interior estricto de un segmento de la frontera no se considera vértice de la envolvente.
+{\bf Complejidad: } $\mathcal{O}(n \log n)$
+{\bf Dependencias: } \texttt{Geometria/Punto}
+*/
 #include <bits/stdc++.h>
 using namespace std;
 

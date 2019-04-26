@@ -1,3 +1,7 @@
+/*INFO
+{\bf Descripción: } Calcula un rolling hash de una string para comparar substrings rápidamente.
+{\bf Complejidad: } $\mathcal{O}(n)$ para construir, $\mathcal{O}(1)$ por query. Un poco lento en la práctica.
+*/
 #include <bits/stdc++.h>
 using namespace std;
 

@@ -1,3 +1,7 @@
+/*INFO
+{\bf Descripción: } Determina si un número es primo.
+{\bf Complejidad: } $\mathcal{O}((\log p)^k)$ para algún $k$ razonable. Rápido en la práctica.
+*/
 #include <bits/stdc++.h>
 using namespace std;
 

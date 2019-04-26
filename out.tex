@@ -5,11 +5,18 @@
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 \fancyhead[L]{Pumazos - Facultad de Ciencias UNAM}\fancyhead[C]{\textsl{\leftmark}}\fancyhead[R]{\thepage}\begin{document}
+\setlength{\parindent=0pt}
 \section{Graficas}
 \subsection{Kruskal}
-\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true,tabsize=2,language=C++,frame=leftline, numbers=left, numberstyle=\tiny, numbersep=5pt}
+\begin{footnotesize}{\bf Descripción:} Encuentra un árbol generador de peso mínimo para una gráfica.
+
+
+{\bf Complejidad:} $\mathcal{O}(E \log E)$
+
+
+{\bf Dependencias:} \texttt{Estructuras/Union Find}
+\end{footnotesize}\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true,tabsize=2,language=C++,frame=leftline, numbers=left, numberstyle=\tiny, numbersep=5pt}
 \begin{lstlisting}
-//Incluye Union Find bajo Estructuras.
 struct edge {
 	int u, v, w;
 	bool operator< (const edge &o) const{ return w < o.w; }
@@ -24,7 +31,11 @@ int kruskal() {
 }
 \end{lstlisting}
 \subsection{LCA}
-\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true,tabsize=2,language=C++,frame=leftline, numbers=left, numberstyle=\tiny, numbersep=5pt}
+\begin{footnotesize}{\bf Descripción: } Calcula saltos de potencias de $2$ en un árbol y calcula el ancestro común más cercano de dos vértices.
+
+
+{\bf Complejidad: } $\mathcal{O}(n \log n)$ en construcción. $\mathcal{O}(\log n)$ por query.
+\end{footnotesize}\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true,tabsize=2,language=C++,frame=leftline, numbers=left, numberstyle=\tiny, numbersep=5pt}
 \begin{lstlisting}
 const int MAXN = 1e6, LOG = 20;
 vector<int> adj[MAXN];
@@ -54,7 +65,11 @@ int LCA(int u, int v) {
 }
 \end{lstlisting}
 \subsection{Vertices y Aristas de Corte}
-\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true,tabsize=2,language=C++,frame=leftline, numbers=left, numberstyle=\tiny, numbersep=5pt}
+\begin{footnotesize}{\bf Descripción: } Encuentra vértices de corte y aristas de corte (puentes) en una gráfica.
+
+
+{\bf Complejidad: } $\mathcal{O}(V + E)$
+\end{footnotesize}\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true,tabsize=2,language=C++,frame=leftline, numbers=left, numberstyle=\tiny, numbersep=5pt}
 \begin{lstlisting}
 const int MAXN = 1e5;
 int low[MAXN], ord[MAXN], tin;
@@ -65,7 +80,7 @@ int dfs(int s) {
 		if(!low[v]) {
 			dfs(v);
 			if(low[v] > ord[s]) { /* uv es puente */ }
-			if(low[v] >= ord[s]) { /* u es punto de articulación (o raíz) */}
+			if(low[v] >= ord[s]) { /* u es punto de articulacion (o raiz) */}
 			low[s] = min(low[s], low[v]);
 		}
 		else if(ord[v] < ord[s])
@@ -75,7 +90,11 @@ int dfs(int s) {
 }
 \end{lstlisting}
 \subsection{SCC}
-\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true,tabsize=2,language=C++,frame=leftline, numbers=left, numberstyle=\tiny, numbersep=5pt}
+\begin{footnotesize}{\bf Descripción: } Encuentra componentes fuertemente conexas en una gráfica dirigida (Tarjan).
+
+
+{\bf Complejidad: } $\mathcal{O}(V + E)$
+\end{footnotesize}\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true,tabsize=2,language=C++,frame=leftline, numbers=left, numberstyle=\tiny, numbersep=5pt}
 \begin{lstlisting}
 vi val, comp, sta;
 int Time, ncomps;
@@ -100,7 +119,11 @@ template<class G> int scc(G &g) {
 \end{lstlisting}
 \section{Strings}
 \subsection{Z Function}
-\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true,tabsize=2,language=C++,frame=leftline, numbers=left, numberstyle=\tiny, numbersep=5pt}
+\begin{footnotesize}{\bf Descripción: } Calcula $z[i] = $ máximo $L$ tal que $s[i : i + L) = s[0 : L)$ para cada $i$. Útil para string matching.
+
+
+{\bf Complejidad: } $\mathcal{O}(n)$
+\end{footnotesize}\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true,tabsize=2,language=C++,frame=leftline, numbers=left, numberstyle=\tiny, numbersep=5pt}
 \begin{lstlisting}
 vi z_func(string &s) {
 	int n = s.length(), l = -1, r = -1;
@@ -114,14 +137,18 @@ vi z_func(string &s) {
 }
 \end{lstlisting}
 \subsection{Manacher}
-\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true,tabsize=2,language=C++,frame=leftline, numbers=left, numberstyle=\tiny, numbersep=5pt}
+\begin{footnotesize}{\bf Descripción: } Calcula $p[i] = $ máximo $L$ tal que $s[i - L : i + L]$ es capicua.
+
+
+{\bf Complejidad: } $\mathcal{O}(n)$
+\end{footnotesize}\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true,tabsize=2,language=C++,frame=leftline, numbers=left, numberstyle=\tiny, numbersep=5pt}
 \begin{lstlisting}
 vi manacher(string &s) {
 	// Encuentra palindromos de longitud impar.
 	int n = s.length(), l = -1, r = -1;
 	vi p(n);
 	for(int i = 0; i < n; i++) {
-		if(i <= r) p[i] = min(p[l + r - i], r - i + 1);
+		if(i <= r) p[i] = min(p[l + r - i], r - i);
 		while(i+p[i]+1 < n && i-p[i]-1 >= 0 && s[i+p[i]+1] == s[i-p[i]-1]) p[i]++;
 		if(i + p[i] > r) l = i - p[i], r = i + p[i];
 	}
@@ -129,9 +156,13 @@ vi manacher(string &s) {
 }
 \end{lstlisting}
 \subsection{Suffix Array}
-\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true,tabsize=2,language=C++,frame=leftline, numbers=left, numberstyle=\tiny, numbersep=5pt}
+\begin{footnotesize}{\bf Descripción: } Crea $SA$ tal que $s[SA[i]:n] \leq s[SA[i + 1]:n]$ para todo $i$.
+
+
+{\bf Complejidad: } $\mathcal{O}(n \log n)$
+\end{footnotesize}\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true,tabsize=2,language=C++,frame=leftline, numbers=left, numberstyle=\tiny, numbersep=5pt}
 \begin{lstlisting}
-const int MAXN = 4e5;
+const int MAXN = 5e5 + 10;
 string s;
 int SA[MAXN], LCP[MAXN], val[MAXN], cnt[MAXN], n;
 
@@ -148,6 +179,7 @@ void csort(int l) {
 		SA[i] = tSA[i];
 }
 void buildSA() {
+	n = s.length();
 	int nval[MAXN], rk, l = 1;
 	iota(SA, SA + n, 0);
 	for(int i = 0; i < n; i++)
@@ -163,7 +195,7 @@ void buildSA() {
 		l <<= 1;
 	} while(val[SA[n - 1]] != n - 1 && l < n);
 }
-void buildLCP() {
+void buildLCP() { // LCP[i] = LCP(s[SA[i - 1]:n], s[SA[i]:n])
 	int pre[MAXN], PLCP[MAXN], L = 0;
 	pre[SA[0]] = -1;
 	for(int i = 1; i < n; i++)
@@ -182,7 +214,11 @@ void buildLCP() {
 }
 \end{lstlisting}
 \subsection{Hashing}
-\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true,tabsize=2,language=C++,frame=leftline, numbers=left, numberstyle=\tiny, numbersep=5pt}
+\begin{footnotesize}{\bf Descripción: } Calcula un rolling hash de una string para comparar substrings rápidamente.
+
+
+{\bf Complejidad: } $\mathcal{O}(n)$ para construir, $\mathcal{O}(1)$ por query. Un poco lento en la práctica.
+\end{footnotesize}\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true,tabsize=2,language=C++,frame=leftline, numbers=left, numberstyle=\tiny, numbersep=5pt}
 \begin{lstlisting}
 struct rhash {
 	ll P, Q;  // P ~ cantidad de caracteres del alfabeto, Q ~ 10^9
@@ -204,7 +240,8 @@ struct rhash {
 \end{lstlisting}
 \section{Geometria}
 \subsection{Punto}
-\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true,tabsize=2,language=C++,frame=leftline, numbers=left, numberstyle=\tiny, numbersep=5pt}
+\begin{footnotesize}{\bf Descripción: } Estructura genérica para representar puntos (vectores) en 2D.
+\end{footnotesize}\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true,tabsize=2,language=C++,frame=leftline, numbers=left, numberstyle=\tiny, numbersep=5pt}
 \begin{lstlisting}
 template<class T>
 struct pt {
@@ -224,7 +261,14 @@ struct pt {
 };
 \end{lstlisting}
 \subsection{Envolvente}
-\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true,tabsize=2,language=C++,frame=leftline, numbers=left, numberstyle=\tiny, numbersep=5pt}
+\begin{footnotesize}{\bf Descripción: } Encuentra la envolvente convexa de un conjunto de puntos. Si un punto está en el interior estricto de un segmento de la frontera no se considera vértice de la envolvente.
+
+
+{\bf Complejidad: } $\mathcal{O}(n \log n)$
+
+
+{\bf Dependencias: } \texttt{Geometria/Punto}
+\end{footnotesize}\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true,tabsize=2,language=C++,frame=leftline, numbers=left, numberstyle=\tiny, numbersep=5pt}
 \begin{lstlisting}
 vector<pt<ll>> convex_hull(vector<pt<ll>> P) {
 	int n = P.size();
@@ -243,19 +287,89 @@ vector<pt<ll>> convex_hull(vector<pt<ll>> P) {
 }
 \end{lstlisting}
 \section{Flujo}
-\subsection{Dinic}
-\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true,tabsize=2,language=C++,frame=leftline, numbers=left, numberstyle=\tiny, numbersep=5pt}
+\subsection{Push-Relabel}
+\begin{footnotesize}{\bf Descripción: } Highest Label Preflow Push con gap heuristic. Calcula un flujo máximo en una red.
+
+
+{\bf Complejidad: } $\mathcal{O}(V^2\sqrt{E})$
+\end{footnotesize}\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true,tabsize=2,language=C++,frame=leftline, numbers=left, numberstyle=\tiny, numbersep=5pt}
 \begin{lstlisting}
-const int MAXN = 5000, INF = 1e9;
-int dist[MAXN], ptr[MAXN], src, dst;
+const int MAXN = 5000 + 5;
+struct Edge {
+	int to, rev;
+	ll flow, cap;
+};
+vector<Edge> adj[MAXN];
+void addEdge(int u, int v, int c, int r = 0) {
+	Edge a = {v, (int)adj[v].size(), 0, c};
+	Edge b = {u, (int)adj[u].size(), 0, r};
+	adj[u].push_back(a);
+	adj[v].push_back(b);
+}
+ll ex[MAXN];
+vi hs[2*MAXN];
+int H[MAXN], ptr[MAXN], n;
+void push(Edge &e, ll f) {
+	Edge &back = adj[e.to][e.rev];
+	if(!ex[e.to] && f) hs[H[e.to]].push_back(e.to);
+	e.flow += f; e.cap -= f; ex[e.to] += f;
+	back.flow -= f; back.cap += f; ex[back.to] -= f;
+}
+ll maxflow(int s, int t) {
+	H[s] = n; ex[t] = 1;
+	vi cnt(2*n); cnt[0] = n - 1;
+	for(auto e : adj[s]) push(e, e.cap);
+
+	for(int ch = 0;;) {
+		while(hs[ch].empty())
+			if(!ch--) return -ex[s];
+		int u = hs[ch].back(); hs[ch].pop_back();
+		while(ex[u] > 0) {
+			if(ptr[u] == adj[u].size()) {
+				ptr[u] = 0;
+				H[u]++;
+				cnt[ch]--;
+				cnt[H[u]]++;
+				if(!cnt[ch] && ch < n) {
+					for(int v = 1; v <= n; v++) {
+						if(H[v] > ch && H[v] < n) {
+							--cnt[H[v]], H[v] = n + 1;
+						}
+					}
+				}
+				ch = H[u];
+			}
+			else {
+				Edge &e = adj[u][ptr[u]];
+				if(e.cap && H[u] ==  H[e.to] + 1)
+					push(e, min(ex[u], e.cap));
+				else ++ptr[u];
+			}
+		}
+	}
+}
+\end{lstlisting}
+\subsection{Dinic}
+\begin{footnotesize}{\bf Descripción:} Encuentra un flujo máximo en una red. Incluye scaling para casos malvados anti-Dinic.
+
+
+{\bf Complejidad:} $\mathcal{O}(V^2E)$ sin scaling. $\mathcal{O}(VE\log(\max))$ con scaling. $\mathcal{O}(E\sqrt{V})$ para matchings. Rápido en la práctica.
+\end{footnotesize}\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true,tabsize=2,language=C++,frame=leftline, numbers=left, numberstyle=\tiny, numbersep=5pt}
+\begin{lstlisting}
+typedef long long ll;
+
+const int MAXN = 5005, INF = 1e9;
+const bool scale = true; // Magia. O(VElog(max)), pero peor constante.
+int dist[MAXN], ptr[MAXN], src, dst, lim = 1;
 struct Edge {
 	int to, rev, f, cap;
-	Edge(int to, int rev, int f, int cap) : to(to), rev(rev), f(f), cap(cap);
 };
 vector<Edge> G[MAXN];
-void addEdge(int u, int v, int cap) {
-	G[u].push_back(Edge(v, G[v].size(), 0, cap));
-	G[v].push_back(Edge(u, G[u].size() - 1, 0, 0));
+void addEdge(int u, int v, int c, int r = 0) {
+	Edge a = {v, (int)G[v].size(), 0, c};
+	Edge b = {u, (int)G[u].size(), 0, r};
+	G[u].push_back(a);
+	G[v].push_back(b);
 }
 bool bfs() {
 	queue<int> q({src});
@@ -266,7 +380,7 @@ bool bfs() {
 		q.pop();
 		for(auto e : G[u]) {
 			int v = e.to;
-			if(dist[v] == -1 && e.f < e.cap) {
+			if(dist[v] == -1 && e.f < e.cap && (!scale || e.cap - e.f >= lim)) {
 				dist[v] = dist[u] + 1;
 				q.push(v);
 			}
@@ -290,20 +404,24 @@ int dfs(int u, int f) {
 }
 long long dinic() {
 	long long mf = 0;
-	while(bfs()) {
-		memset(ptr, 0, sizeof ptr);
-		while(long long pushed = dfs(src, INF))
-			mf += pushed;
+	for(lim = (scale ? (1 << 30) : 1); lim > 0; lim >>= 1) {
+		while(bfs()) {
+			memset(ptr, 0, sizeof ptr);
+			while(long long pushed = dfs(src, INF))
+				mf += pushed;
+		}
 	}
 	return mf;
 }
 \end{lstlisting}
 \section{Estructuras}
 \subsection{CHT}
-\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true,tabsize=2,language=C++,frame=leftline, numbers=left, numberstyle=\tiny, numbersep=5pt}
+\begin{footnotesize}{\bf Descripción:} Mantiene una envolvente $S$ con queries de agregar lineas $y = mx + b$ y queries para $\max_{(m, b)\in S} mx + b$.
+
+
+{\bf Complejidad:} $\mathcal{O}(\log n)$ amortizado por query.
+\end{footnotesize}\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true,tabsize=2,language=C++,frame=leftline, numbers=left, numberstyle=\tiny, numbersep=5pt}
 \begin{lstlisting}
-// Tomado de KACTL. O(nlog n). Para O(n) se hace un deque de lineas y se saca del
-// lado correspondiente cuando salen de la envolvente o no son relevantes.
 bool Q;
 struct Line {
 	mutable ll m, b, p;
@@ -336,7 +454,11 @@ struct LineContainer : multiset<Line> {
 };
 \end{lstlisting}
 \subsection{Union Find}
-\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true,tabsize=2,language=C++,frame=leftline, numbers=left, numberstyle=\tiny, numbersep=5pt}
+\begin{footnotesize}{\bf Descripción:} Union Find con path compression y union by size. Mantiene representantes de una unión disjunta.
+
+
+{\bf Complejidad:} $\mathcal{O}(\alpha(n))$ amortizado.
+\end{footnotesize}\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true,tabsize=2,language=C++,frame=leftline, numbers=left, numberstyle=\tiny, numbersep=5pt}
 \begin{lstlisting}
 const int MAXN = 1e6;
 int rep[MAXN], sz[MAXN];
@@ -354,7 +476,11 @@ bool join(int u, int v) {
 }
 \end{lstlisting}
 \subsection{Wavelet Tree}
-\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true,tabsize=2,language=C++,frame=leftline, numbers=left, numberstyle=\tiny, numbersep=5pt}
+\begin{footnotesize}{\bf Descripción:} Árbol que mantiene subsucesiones de un arreglo formadas por elementos con valores en ciertos intervalos. Útil para range queries de k-ésimo elemento o número de elementos debajo de cierta cota, etc.
+
+
+{\bf Complejidad:} $\mathcal{O}(\log(\max A))$ por query.
+\end{footnotesize}\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true,tabsize=2,language=C++,frame=leftline, numbers=left, numberstyle=\tiny, numbersep=5pt}
 \begin{lstlisting}
 struct wnode {
 	wnode *left, *right;
@@ -383,7 +509,11 @@ struct wnode {
 };
 \end{lstlisting}
 \subsection{Segment Tree}
-\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true,tabsize=2,language=C++,frame=leftline, numbers=left, numberstyle=\tiny, numbersep=5pt}
+\begin{footnotesize}{\bf Descripción:} Segment Tree recursivo para RMQ y similares.
+
+
+{\bf Complejidad:} $\mathcal{O}(\log n)$ en updates y queries.
+\end{footnotesize}\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true,tabsize=2,language=C++,frame=leftline, numbers=left, numberstyle=\tiny, numbersep=5pt}
 \begin{lstlisting}
 const int NE = 1e9;
 struct node {
@@ -420,7 +550,11 @@ struct node {
 \end{lstlisting}
 \section{Mate}
 \subsection{Miller-Rabin}
-\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true,tabsize=2,language=C++,frame=leftline, numbers=left, numberstyle=\tiny, numbersep=5pt}
+\begin{footnotesize}{\bf Descripción: } Determina si un número es primo.
+
+
+{\bf Complejidad: } $\mathcal{O}((\log p)^k)$ para algún $k$ razonable. Rápido en la práctica.
+\end{footnotesize}\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true,tabsize=2,language=C++,frame=leftline, numbers=left, numberstyle=\tiny, numbersep=5pt}
 \begin{lstlisting}
 bool isprime(ll p) {
 	if(p == 1) return false;
@@ -440,7 +574,11 @@ bool isprime(ll p) {
 }
 \end{lstlisting}
 \subsection{CRT}
-\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true,tabsize=2,language=C++,frame=leftline, numbers=left, numberstyle=\tiny, numbersep=5pt}
+\begin{footnotesize}{\bf Descripción: } Encuentra $x$ tal que $x \equiv x_1 \pmod{m_1}, x \equiv x_2 \pmod{m_2}$. Regresa $-1$ si tal $x$ no existe.
+
+
+{\bf Complejidad: } $\mathcal{O}(\log(m_1 + m_2))$. Rápido en la práctica.
+\end{footnotesize}\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true,tabsize=2,language=C++,frame=leftline, numbers=left, numberstyle=\tiny, numbersep=5pt}
 \begin{lstlisting}
 template<typename T> void euclid(T a, T b, T &x, T &y) {
 	if(!b) {x = 1, y = 0; return;}
@@ -459,7 +597,11 @@ template<typename T> T crt(T x1, T m1, T x2, T m2) {
 \end{lstlisting}
 \section{Varios}
 \subsection{LIS}
-\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true,tabsize=2,language=C++,frame=leftline, numbers=left, numberstyle=\tiny, numbersep=5pt}
+\begin{footnotesize}{\bf Descripción:} Encuentra una subsucesión creciente (o estrictamente creciente) de longitud máxima.
+
+
+{\bf Complejidad:} $\mathcal{O}(n \log n)$.
+\end{footnotesize}\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true,tabsize=2,language=C++,frame=leftline, numbers=left, numberstyle=\tiny, numbersep=5pt}
 \begin{lstlisting}
 vl lis(vl a) {
 	int n = a.size(), sz = 0; map<pl, pl> pre;

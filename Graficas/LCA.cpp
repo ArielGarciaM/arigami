@@ -1,3 +1,7 @@
+/*INFO
+{\bf Descripción: } Calcula saltos de potencias de $2$ en un árbol y calcula el ancestro común más cercano de dos vértices.
+{\bf Complejidad: } $\mathcal{O}(n \log n)$ en construcción. $\mathcal{O}(\log n)$ por query.
+*/
 #include <bits/stdc++.h>
 using namespace std;
 

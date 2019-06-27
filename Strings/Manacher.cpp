@@ -20,13 +20,17 @@ vi manacher(string &s) {
     return p;
 }
 int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    int n;
     string s;
-    cin >> s;
-    for(int i = 0; i < s.length(); i++)
-        cout << s[i] << " ";
-    cout << endl;
-    vi p = manacher(s);
-    for(int i = 0; i < s.length(); i++)
-        cout << p[i] << " ";
-    cout << endl;
+    cin >> n >> s;
+    string t = "*";
+    for(int i = 0; i < s.length(); i++) {
+        t += s[i];
+        t += '*';
+    }
+    //cout << t << endl;
+    auto p = manacher(t);
+    cout << *max_element(p.begin(), p.end()) << endl;
 }

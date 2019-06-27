@@ -9,7 +9,7 @@ typedef long long ll;
 //unignore
 
 const int MAXN = 5005, INF = 1e9;
-const bool scale = true; // Magia. O(VElog(max)), pero peor constante.
+const bool scale = false; // Magia. O(VElog(max)), pero peor constante.
 int dist[MAXN], ptr[MAXN], src, dst, lim = 1;
 struct Edge {
     int to, rev, f, cap;

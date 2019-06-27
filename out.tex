@@ -64,6 +64,22 @@ int LCA(int u, int v) {
 	return up[0][u];
 }
 \end{lstlisting}
+\subsection{Floyd}
+\begin{footnotesize}{\bf Descripción:} Calcula la distancia mínima entre cualesquiera dos vértices de una gráfica dirigida.
+
+
+{\bf Complejidad:} $\mathcal{O}(n^3)$
+\end{footnotesize}\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true,tabsize=2,language=C++,frame=leftline, numbers=left, numberstyle=\tiny, numbersep=5pt}
+\begin{lstlisting}
+const int MAXN = 500, INF = 1e9;
+int G[MAXN][MAXN], n;
+void floyd() {
+	for(int k = 0; k < n; k++)
+		for(int i = 0; i < n; i++)
+			for(int j = 0; j < n; j++)
+				G[i][j] = min(G[i][j], G[i][k] + G[k][j]);
+}
+\end{lstlisting}
 \subsection{Vertices y Aristas de Corte}
 \begin{footnotesize}{\bf Descripción: } Encuentra vértices de corte y aristas de corte (puentes) en una gráfica.
 
@@ -359,7 +375,7 @@ ll maxflow(int s, int t) {
 typedef long long ll;
 
 const int MAXN = 5005, INF = 1e9;
-const bool scale = true; // Magia. O(VElog(max)), pero peor constante.
+const bool scale = false; // Magia. O(VElog(max)), pero peor constante.
 int dist[MAXN], ptr[MAXN], src, dst, lim = 1;
 struct Edge {
 	int to, rev, f, cap;
@@ -475,6 +491,56 @@ bool join(int u, int v) {
 	return sz[u] += sz[v], rep[v] = u, true;
 }
 \end{lstlisting}
+\subsection{Treap}
+\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true,tabsize=2,language=C++,frame=leftline, numbers=left, numberstyle=\tiny, numbersep=5pt}
+\begin{lstlisting}
+const int SEED = 17111999;
+struct treap {
+	int k, p, cnt;
+	treap *l, *r;
+	treap() {}
+	treap(int k, int p) : k(k), p(p), l(nullptr), r(nullptr){}
+};
+typedef treap* ptreap;
+inline int cnt(ptreap t) { return t ? t->cnt : 0; }
+inline void upd(ptreap t) { if(t) t->cnt = 1 + cnt(t->l) + cnt(t->r); }
+void split(ptreap t, ll k, ptreap &l, ptreap &r) {
+	if(!t)
+		l = r = nullptr;
+	else if (k < t->k)
+		split(t->l, k, l, t->l), r = t;
+	else
+		split(t->r, k, t->r, r), l = t;
+	upd(t);
+}
+void merge(ptreap &t, ptreap l, ptreap r) {
+	if(!l || !r)
+		t = l ? l : r;
+	else if(l.p > r.p)
+		merge(l->r, l->r, r), t = l;
+	else
+		merge(r->l, l, r->l), t = r;
+	upd(t);
+}
+void insert(ptreap &t, ptreap x) {
+	if(!t)
+		t = x;
+	else if(x->p > t->p)
+		split(t, x->k, x->l, x->r), t = x;
+	else
+		insert(x->k < t->k ? t->l : t->r, x);
+	upd(t);
+}
+void erase(ptreap &t, int k) {
+	if(!t)
+		return;
+	if(t->k == k)
+		merge(t, t->l, t->r);
+	else
+		erase(k < t->k ? t->l : t->r, k);
+	upd(t);
+}
+\end{lstlisting}
 \subsection{Wavelet Tree}
 \begin{footnotesize}{\bf Descripción:} Árbol que mantiene subsucesiones de un arreglo formadas por elementos con valores en ciertos intervalos. Útil para range queries de k-ésimo elemento o número de elementos debajo de cierta cota, etc.
 
@@ -509,7 +575,7 @@ struct wnode {
 };
 \end{lstlisting}
 \subsection{Segment Tree}
-\begin{footnotesize}{\bf Descripción:} Segment Tree recursivo para RMQ y similares.
+\begin{footnotesize}{\bf Descripción:} Segment Tree recursivo para RMQ y similares. Los intervalos son cerrados.
 
 
 {\bf Complejidad:} $\mathcal{O}(\log n)$ en updates y queries.
@@ -525,7 +591,7 @@ struct node {
 		else {
 			int mi = (l + r)/2;
 			left = new node(l, mi, A);
-			right = new node(r + 1, mi, A);
+			right = new node(mi + 1, r, A);
 			mn = min(left->mn, right->mn);
 		}
 	}
@@ -547,6 +613,10 @@ struct node {
 		return min(left->qry(rl, rr), right->qry(rl, rr));
 	}
 };
+
+const int MAXN = 1e5 + 5;
+int a[MAXN];
+
 \end{lstlisting}
 \section{Mate}
 \subsection{Miller-Rabin}
@@ -573,6 +643,11 @@ bool isprime(ll p) {
 	return true;
 }
 \end{lstlisting}
+\subsection{Matriz}
+\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true,tabsize=2,language=C++,frame=leftline, numbers=left, numberstyle=\tiny, numbersep=5pt}
+\begin{lstlisting}
+
+\end{lstlisting}
 \subsection{CRT}
 \begin{footnotesize}{\bf Descripción: } Encuentra $x$ tal que $x \equiv x_1 \pmod{m_1}, x \equiv x_2 \pmod{m_2}$. Regresa $-1$ si tal $x$ no existe.
 
@@ -594,6 +669,55 @@ template<typename T> T crt(T x1, T m1, T x2, T m2) {
 	T mod = d*m1*m2, a1 = ((m1*r)%mod*x2)%mod, a2 = ((m2*s)%mod*x1)%mod, y = (a1 + a2)%mod;
 	return (y >= 0 ? y : y + mod);
 }
+\end{lstlisting}
+\subsection{FFT}
+\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true,tabsize=2,language=C++,frame=leftline, numbers=left, numberstyle=\tiny, numbersep=5pt}
+\begin{lstlisting}
+typedef complex<double> C;
+const double PI = acos(-1);
+
+/* Para NTT:
+998244353 = 119*2^23 + 1, raíz primitiva 3.
+*/
+vector<C> fft(vector<C> &P, vector<C> &root, vector<int> &rev) {
+	int n = P.size();
+	vector<C> f(n);
+	for(int i = 0; i < n; i++)
+		f[i] = P[rev[i]];
+	for(int k = 1; k < n; k *= 2) {
+		for(int i = 0; i < n; i += 2*k) {
+			for(int j = 0; j < k; j++) {
+				C z;
+				if(j == 0) z = f[i + j + k]; 
+				else z = root[j*(n/(2*k))] * f[i + j + k];
+				f[i + j + k] = f[i + j] - z;
+				f[i + j] = f[i + j] + z;
+			}
+		}
+	}
+	return f;
+}
+
+vector<C> conv(vector<C> A, vector<C> B) {
+	int n = A.size() + B.size(), L = 32 - __builtin_clz(n);
+	n = 1 << L;
+	A.resize(n, 0), B.resize(n, 0);
+	vector<C> root(n);
+	for(int i = 0; i < n; i++)
+		root[i] = polar(1.0, 2.0*PI*double(i)/double(n));
+	vector<int> rev(n);
+	for(int i = 1; i < n; i++)
+		rev[i] = (rev[i >> 1] >> 1) + ((i & 1) << (L - 1));
+	vector<C> f = fft(A, root, rev), g = fft(B, root, rev);
+	for(int i = 0; i < n; i++)
+		f[i] *= g[i];
+	root.push_back({1, 0}); reverse(root.begin(), root.end()), root.pop_back();
+	g = fft(f, root, rev);
+	for(int i = 0; i < n; i++)
+		g[i] /= n;
+	return g;
+}
+
 \end{lstlisting}
 \section{Varios}
 \subsection{LIS}

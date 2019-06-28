@@ -17,6 +17,7 @@ struct complejo{
     double magnitude() {return sqrt(a*a+b*b);}
     void print() {printf("(%.3f %.3f)\n", a, b);}
 };
+typedef complejo C;
 
 const double PI = acos(0)*2;
 const int MAX = 1e5+10;

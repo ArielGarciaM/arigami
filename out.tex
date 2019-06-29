@@ -643,6 +643,69 @@ bool isprime(ll p) {
 	return true;
 }
 \end{lstlisting}
+\subsection{NTT}
+\begin{footnotesize}{\bf Descripción: } Dadas sucesiones enteras $\{a_k\}$ y $\{b_k\}$, $\texttt{conv}(a, b)$ calculauna convolucion
+
+
+$c_k = \sum a_ib_{k - i} \pmod{p}$ para $p = 2^ab + 1$ un primo con $2^a$ mayor a la longitud de las sucesiones.
+
+
+{\bf Complejidad: } $\mathcal{O}(n \log n)$.
+\end{footnotesize}\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true,tabsize=2,language=C++,frame=leftline, numbers=left, numberstyle=\tiny, numbersep=5pt}
+\begin{lstlisting}
+typedef vector<ll> vl;
+
+/* Otras alternativas:
+   P = 5 << 25 + 1, 7 << 26 + 1, ambos con raiz 3. */
+const ll MOD = (119 << 23) + 1, gen = 3;
+
+ll mpow(ll b, ll e) {
+	ll res = 1;
+	for(ll k = 1; k <= e; k <<= 1) {
+		if(k & e) res = (res * b)%MOD;
+		b = (b * b)%MOD;
+	}
+	return res;
+}
+
+void ntt(vl &f, vl &root, vector<int> &rev) {
+	int n = f.size();
+	for(int i = 0; i < n; i++)
+		if(i < rev[i]) swap(f[i], f[rev[i]]);
+	for(int k = 1; k < n; k *= 2) {
+		for(int i = 0; i < n; i += 2*k) {
+			for(int j = 0; j < k; j++) {
+				ll z = (root[j + k] * f[i + j + k]) % MOD;
+				f[i + j + k] = (f[i + j] < z ? f[i + j] - z + MOD : f[i + j] - z);
+				f[i + j] = (f[i + j] + z >= MOD ? f[i + j] + z - MOD : f[i + j] + z);
+			}
+		}
+	}
+}
+
+vl conv(vl A, vl B) {
+	int sz = A.size() + B.size() - 1, L = 32 - __builtin_clz(sz), n = 1 << L;
+	vl f(A), g(B), res(n), root(n, 1);
+	f.resize(n), g.resize(n);
+	ll pr = mpow(gen, MOD/n), inv = mpow(n, MOD - 2);
+	for(int i = n/2 + 1; i < n; i++)
+		root[i] = (pr * root[i - 1])%MOD;
+	for(int i = n/2 - 1; i >= 0; i--)
+		root[i] = root[2*i];
+	vector<int> rev(n);
+	for(int i = 1; i < n; i++)
+		rev[i] = (rev[i >> 1] >> 1) + ((i & 1) << (L - 1));
+	ntt(f, root, rev), ntt(g, root, rev);
+	for(int i = 0; i < n; i++)
+		res[i] = (f[i] * g[i])%MOD;
+	reverse(res.begin() + 1, res.end());
+	ntt(res, root, rev);
+	for(int i = 0; i < sz; i++)
+		res[i] = (res[i] * inv) % MOD;
+	return {res.begin(), res.begin() + sz};
+}
+
+\end{lstlisting}
 \subsection{Matriz}
 \lstset{basicstyle=\footnotesize\ttfamily,breaklines=true,tabsize=2,language=C++,frame=leftline, numbers=left, numberstyle=\tiny, numbersep=5pt}
 \begin{lstlisting}
@@ -671,51 +734,63 @@ template<typename T> T crt(T x1, T m1, T x2, T m2) {
 }
 \end{lstlisting}
 \subsection{FFT}
-\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true,tabsize=2,language=C++,frame=leftline, numbers=left, numberstyle=\tiny, numbersep=5pt}
-\begin{lstlisting}
-typedef complex<double> C;
-const double PI = acos(-1);
+\begin{footnotesize}{\bf Descripción: } Dadas sucesiones reales $\{a_k\}$ y $\{b_k\}$, $\texttt{conv}(a, b)$ calcula una convolucion
 
-/* Para NTT:
-998244353 = 119*2^23 + 1, raíz primitiva 3.
-*/
-vector<C> fft(vector<C> &P, vector<C> &root, vector<int> &rev) {
-	int n = P.size();
-	vector<C> f(n);
+
+$c_k = \sum a_ib_{k - i}$. Es preciso para resultados menores a $10^{15}$. En otro caso
+
+
+es mejor usar NTT y CRT o ftt-mod.
+
+
+{\bf Complejidad: } $\mathcal{O}(n \log n)$.
+\end{footnotesize}\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true,tabsize=2,language=C++,frame=leftline, numbers=left, numberstyle=\tiny, numbersep=5pt}
+\begin{lstlisting}
+
+const double T_PI = 2.0*acos(-1);
+typedef complex<double> C;
+
+C mul(const C &x, const C &y) {
+	double rx = x.real(), ix = x.imag(), ry = y.real(), iy = y.imag();
+	return C(rx*ry - ix*iy, rx*iy + ix*ry);
+}
+
+void fft(vector<C> &f, vector<C> &root, vector<int> &rev) {
+	int n = f.size();
 	for(int i = 0; i < n; i++)
-		f[i] = P[rev[i]];
-	for(int k = 1; k < n; k *= 2) {
+		if(i < rev[i]) swap(f[i], f[rev[i]]);
+	for(int k = 1; k < n; k <<= 1) {
 		for(int i = 0; i < n; i += 2*k) {
 			for(int j = 0; j < k; j++) {
-				C z;
-				if(j == 0) z = f[i + j + k]; 
-				else z = root[j*(n/(2*k))] * f[i + j + k];
+				C z = mul(root[j + k], f[i + j + k]);
 				f[i + j + k] = f[i + j] - z;
 				f[i + j] = f[i + j] + z;
 			}
 		}
 	}
-	return f;
 }
 
-vector<C> conv(vector<C> A, vector<C> B) {
-	int n = A.size() + B.size(), L = 32 - __builtin_clz(n);
-	n = 1 << L;
-	A.resize(n, 0), B.resize(n, 0);
-	vector<C> root(n);
-	for(int i = 0; i < n; i++)
-		root[i] = polar(1.0, 2.0*PI*double(i)/double(n));
+vector<double> conv(vector<double> &A, vector<double> &B) {
+	int sz = A.size() + B.size() - 1, L = 32 - __builtin_clz(sz), n = 1 << L;
+	vector<C> in(n), out(n), root(n);
+	for(int i = 0; i < A.size(); i++) in[i].real(A[i]);
+	for(int i = 0; i < B.size(); i++) in[i].imag(B[i]);
+	for(int i = 0; i < n / 2; i++)
+		root[i + n/2] = polar(1.0, T_PI*(double)i/n);
+	for(int i = n/2 - 1; i >= 0; i--)
+		root[i] = root[i << 1];
 	vector<int> rev(n);
 	for(int i = 1; i < n; i++)
 		rev[i] = (rev[i >> 1] >> 1) + ((i & 1) << (L - 1));
-	vector<C> f = fft(A, root, rev), g = fft(B, root, rev);
-	for(int i = 0; i < n; i++)
-		f[i] *= g[i];
-	root.push_back({1, 0}); reverse(root.begin(), root.end()), root.pop_back();
-	g = fft(f, root, rev);
-	for(int i = 0; i < n; i++)
-		g[i] /= n;
-	return g;
+	fft(in, root, rev);
+	for(int i = 0; i < n; i++) {
+		C z = in[i], zc = in[-i & (n - 1)];
+		out[i] = mul(zc, zc) - conj(mul(z, z));
+	}
+	fft(out, root, rev);
+	vector<double> res(sz);
+	for(int i = 0; i < sz; i++) res[i] = out[i].imag()/(4.0*n);
+	return res;
 }
 
 \end{lstlisting}

@@ -65,7 +65,7 @@ double dis(pt X, pt A, pt B) {
 }
 
 bool on_seg(pt X, pt A, pt B) {
-    return fabs((A - X).norm() + (B - X).norm() - (A - B).norm()) < 1e-9;
+    return fabs((A - X).norm() + (B - X).normDoc() - (A - B).norm()) < 1e-9;
 }
 
 bool in_poly(pt A, poly Q) {
